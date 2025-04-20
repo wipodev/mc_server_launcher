@@ -8,15 +8,25 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.downloader import get_forge_versions, download_forge_server
 
 def main():
-    print("Versiones Forge disponibles:")
+    print("Obteniendo lista de versiones Forge disponibles...")
     versions = get_forge_versions()
     for i, v in enumerate(versions):
-        print(f"{i + 1}. {v}")
+        print(f"{i + 1}. {v['id']}")
     
-    choice = int(input("Selecciona una versión Forge para descargar: "))
-    version = versions[choice - 1]
-    dest = f"servers/forge/{version}"
-    download_forge_server(version, dest)
+    choice = int(input("\nEscribe el número de la versión que deseas descargar: "))
+
+    try:
+        index = choice - 1
+        if index < 0 or index >= len(versions):
+            raise ValueError("Número fuera de rango.")
+    except ValueError as e:
+        print(f"Entrada inválida: {e}")
+        return
+    
+    version = versions[index]
+    dest_dir = os.path.join("dev_scripts", "servers", "forge", version["id"])
+
+    download_forge_server(version["id"], dest_dir)
 
 if __name__ == "__main__":
     main()

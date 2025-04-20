@@ -38,17 +38,16 @@ def get_forge_versions():
     response = requests.get(FORGE_PROMO_JSON)
     promos = response.json()["promos"]
     versions = set()
-    for key in promos.keys():
+    for key, forge_version in promos.items():
         if key.endswith("-recommended") or key.endswith("-latest"):
             mc_version = key.split("-")[0]
-            forge_version = promos[key]
-            versions.add(f"{mc_version}-{forge_version}")
-    return sorted(versions, reverse=True)
+            full_version = f"{mc_version}-{forge_version}"
+            versions.add(full_version)
+    return [{"id": v} for v in sorted(versions, reverse=True)]
 
 def download_forge_server(forge_version, dest_dir):
     print(f"Descargando Forge {forge_version}...")
 
-    mc_version = forge_version.split("-")[0]
     installer_filename = f"forge-{forge_version}-installer.jar"
     installer_url = f"{FORGE_MAVEN_URL}{forge_version}/{installer_filename}"
 

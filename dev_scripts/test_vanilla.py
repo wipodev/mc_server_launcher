@@ -10,14 +10,13 @@ from utils.downloader import get_vanilla_versions, download_vanilla_server
 def main():
     print("Obteniendo lista de versiones Vanilla disponibles...")
     versions = get_vanilla_versions()
+    for i, v in enumerate(versions):
+        print(f"{i + 1}. {v['id']}")
 
-    for idx, v in enumerate(versions):
-        print(f"{idx + 1}. {v['id']}")
-
-    choice = input("\nEscribe el número de la versión que deseas descargar: ")
+    choice = int(input("\nEscribe el número de la versión que deseas descargar: "))
     
     try:
-        index = int(choice) - 1
+        index = choice - 1
         if index < 0 or index >= len(versions):
             raise ValueError("Número fuera de rango.")
     except ValueError as e:
@@ -25,10 +24,9 @@ def main():
         return
 
     version = versions[index]
-    dest_dir = os.path.join("servers", "vanilla", version["id"])
+    dest_dir = os.path.join("dev_scripts", "servers", "vanilla", version["id"])
 
-    jar_path = download_vanilla_server(version["id"], version["url"], dest_dir)
-    print(f"\n¡Servidor Vanilla descargado correctamente en: {jar_path}")
+    download_vanilla_server(version["id"], version["url"], dest_dir)
 
 if __name__ == "__main__":
     main()
