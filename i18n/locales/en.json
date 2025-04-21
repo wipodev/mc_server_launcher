@@ -1,0 +1,16 @@
+{
+  "title": "MC Server Launcher",
+  "select_server_type": "Server Type",
+  "vanilla": "Vanilla",
+  "forge": "Forge",
+  "search_version": "Search version:",
+  "select_version": "Select a version:",
+  "download_server": "Download Server",
+  "getting_versions": "Fetching versions...",
+  "status_ready": "Ready.",
+  "error_fetch_versions": "Failed to fetch versions:",
+  "status_error": "Error during download.",
+  "status_downloading": "Downloading...",
+  "download_success": "Version {version} downloaded successfully.",
+  "download_fail": "Download failed: "
+}

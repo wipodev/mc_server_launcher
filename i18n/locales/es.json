@@ -1,0 +1,16 @@
+{
+  "title": "Lanzador de Servidor MC",
+  "select_server_type": "Tipo de servidor",
+  "vanilla": "Vanilla",
+  "forge": "Forge",
+  "search_version": "Buscar versión:",
+  "select_version": "Selecciona una versión:",
+  "download_server": "Descargar servidor",
+  "getting_versions": "Obteniendo versiones...",
+  "status_ready": "Listo.",
+  "error_fetch_versions": "No se pudo obtener versiones:",
+  "status_error": "Error durante la descarga.",
+  "status_downloading": "Descargando...",
+  "download_success": "Versión {version} descargada con éxito.",
+  "download_fail": "No se pudo descargar: "
+}

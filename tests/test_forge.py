@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # local import
-from utils.downloader import get_forge_versions, download_forge_server
+from app.downloader import get_forge_versions, download_forge_server
 
 def main():
     print("Obteniendo lista de versiones Forge disponibles...")
