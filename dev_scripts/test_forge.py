@@ -26,6 +26,8 @@ def main():
     version = versions[index]
     dest_dir = os.path.join("dev_scripts", "servers", "forge", version["id"])
 
+    print(f"version: {version['id']} dest_dir: {dest_dir}")
+    
     download_forge_server(version["id"], dest_dir)
 
 if __name__ == "__main__":

@@ -12,11 +12,15 @@ FORGE_MAVEN_URL = "https://maven.minecraftforge.net/net/minecraftforge/forge/"
 
 def get_vanilla_versions():
     response = requests.get(VANILLA_MANIFEST_URL)
-    data = response.json()
-    return [
-        {"id": v["id"], "url": v["url"]}
-        for v in data["versions"] if v["type"] == "release"
-    ]
+    data = response.json()["versions"]
+    versions = set()
+
+    for v in data:
+        if v["type"] == "release":
+            parsed = parse_version_tuple(v["id"])
+            if parsed:
+                versions.add((parsed, v["id"], v["url"]))
+    return [{"id": v, "url": url} for _, v, url in sorted(versions, reverse=True)]
 
 def download_vanilla_server(version_id, url, dest_dir):
     print(f"Obteniendo JAR para versión Vanilla {version_id}...")
@@ -34,16 +38,24 @@ def download_vanilla_server(version_id, url, dest_dir):
     print(f"Versión {version_id} descargada en {jar_path}")
     return jar_path
 
+def parse_version_tuple(version_str):
+    if all(part.isdigit() for part in version_str.split(".")):
+        return tuple(map(int, version_str.split(".")))
+
 def get_forge_versions():
     response = requests.get(FORGE_PROMO_JSON)
-    promos = response.json()["promos"]
+    data = response.json()["promos"]
     versions = set()
-    for key, forge_version in promos.items():
+
+    for key, forge_version in data.items():
         if key.endswith("-recommended") or key.endswith("-latest"):
             mc_version = key.split("-")[0]
-            full_version = f"{mc_version}-{forge_version}"
-            versions.add(full_version)
-    return [{"id": v} for v in sorted(versions, reverse=True)]
+            mc_part = parse_version_tuple(mc_version)
+            forge_part = parse_version_tuple(forge_version)
+            if mc_part and forge_part:
+              version_id = mc_version + "-" + forge_version
+              versions.add(((mc_part, forge_part), version_id))
+    return [{"id": v} for _, v in sorted(versions, reverse=True)]
 
 def download_forge_server(forge_version, dest_dir):
     print(f"Descargando Forge {forge_version}...")
@@ -66,7 +78,6 @@ def download_forge_server(forge_version, dest_dir):
     # Convertir la ruta a una absoluta con formato correcto
     installer_path = str(Path(installer_path).resolve())
 
-    # Ejecutar el instalador
     result = subprocess.run(["java", "-jar", installer_path, "--installServer"], cwd=os.path.abspath(dest_dir))
 
     if result.returncode == 0:
